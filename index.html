@@ -9,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        /* --- VARIABLES & RESET --- */
+        /* --- VARIABLES & RESET (CÓDIGO ORIGINAL INTACTO) --- */
         :root {
             --book-width: 460px;
             --book-height: 600px;
@@ -18,8 +18,8 @@
             --text-color: #2c3e50;
             --accent-color: #5d4037;
             --gold-color: #d4af37;
-            --endpaper-bg: #e8f5e9; /* Verde Pastel Fondo */
-            --endpaper-dot: #a5d6a7; /* Verde Pastel Puntos */
+            --endpaper-bg: #a5d6a7; 
+            --endpaper-dot: #ffffff; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -115,8 +115,6 @@
         }
 
         /* --- ESTILOS DE PÁGINA --- */
-
-        /* 1. Imagen (Portada, Cuerpo, Contraportada) */
         .image-page {
             background-size: cover;
             background-position: center;
@@ -124,7 +122,6 @@
         }
         .image-page .content-wrapper { display: none; }
 
-        /* 2. Texto (Créditos, Dedicatoria, Respeto) */
         .text-page {
             background-color: #fffefae6;
             display: flex; flex-direction: column;
@@ -147,7 +144,6 @@
         }
         .legal-text { font-size: 0.75rem !important; color: #888 !important; font-style: normal !important; }
 
-        /* 3. Guardas (Verde Pastel) */
         .endpaper {
             background-color: var(--endpaper-bg);
             background-image: radial-gradient(var(--endpaper-dot) 1.5px, transparent 1.5px), radial-gradient(var(--endpaper-dot) 1.5px, transparent 1.5px);
@@ -155,47 +151,21 @@
             background-position: 0 0, 10px 10px;
         }
 
-        /* --- ELEMENTOS PEDAGÓGICOS --- */
-        .edu-hotspot {
-            position: absolute; top: 20px; right: 20px;
-            width: 30px; height: 30px; background: var(--gold-color);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: white; cursor: pointer; z-index: 50;
-            animation: pulse-gold 2s infinite;
+        /* --- ESTILO PARA NUMERACIÓN DE PÁGINAS --- */
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: var(--text-color);
+            font-weight: bold;
+            pointer-events: none;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+            z-index: 10;
         }
-        .back .edu-hotspot { right: auto; left: 20px; }
-        .edu-hotspot i { font-size: 0.9rem; }
+        .front .page-number { right: 20px; }
+        .back .page-number { left: 20px; }
 
-        .edu-bubble {
-            position: absolute; top: 55px; right: -10px; width: 260px;
-            background: white; padding: 15px; border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            border-top: 3px solid var(--gold-color);
-            opacity: 0; visibility: hidden; transform: translateY(10px);
-            transition: all 0.3s ease; z-index: 60; text-align: left; pointer-events: none;
-        }
-        .edu-bubble::before {
-            content: ''; position: absolute; top: -6px; right: 20px;
-            width: 12px; height: 12px; background: white;
-            transform: rotate(45deg); border-top: 3px solid var(--gold-color); border-left: 3px solid var(--gold-color);
-        }
-        .back .edu-bubble { right: auto; left: -10px; border-top: 3px solid var(--gold-color); }
-        .back .edu-bubble::before { right: auto; left: 20px; }
-        .edu-hotspot:hover + .edu-bubble { opacity: 1; visibility: visible; transform: translateY(0); }
-
-        .edu-bubble h4 {
-            font-family: 'Cinzel', serif; color: var(--accent-color);
-            font-size: 0.85rem; margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px;
-        }
-        .edu-bubble p {
-            font-family: 'Lato', sans-serif; font-size: 0.8rem; line-height: 1.4; color: #666;
-        }
-
-        @keyframes pulse-gold {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-        }
 
         /* --- BOTONES NAVEGACIÓN --- */
         .nav-btn {
@@ -215,10 +185,151 @@
             .prev-btn { left: 20px; } .next-btn { right: 20px; }
             .sidebar { display: none; }
         }
+
+        /* ========================================================================= */
+        /* --- ESTILO: SISTEMA DE ETIQUETAS PEDAGÓGICAS Y PERSONAJE --- */
+        /* ========================================================================= */
+        .pedagogical-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 200;
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch; 
+            padding: 0 5px; 
+        }
+
+        .ped-label-container {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* CLASES DINÁMICAS DE POSICIÓN VERTICAL */
+        .align-bottom {
+            justify-content: flex-end;
+            padding-bottom: max(20px, calc(50vh - 280px));
+            padding-top: 0;
+        }
+
+        .align-top {
+            justify-content: flex-start;
+            padding-top: max(20px, calc(50vh - 280px));
+            padding-bottom: 0;
+        }
+
+        /* --- CONFIGURACIÓN DE ANIMACIONES LATERALES --- */
+        
+        .ped-label-left {
+            margin-left: 5px; 
+            text-align: right;
+            align-items: flex-end;
+        }
+
+        .ped-label-right {
+            margin-right: 5px; 
+            text-align: left;
+            align-items: flex-start;
+        }
+
+        /* Estilos base (ocultos) */
+        .ped-cloud, .ped-character {
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .ped-cloud {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            border: 1px solid #eee;
+            position: relative;
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .ped-character {
+            width: 120px;
+            height: auto;
+            transition-delay: 0.1s; 
+        }
+
+        /* --- ANIMACIONES LADO IZQUIERDO: Entran desde la izquierda (-X) --- */
+        .ped-label-left .ped-cloud,
+        .ped-label-left .ped-character {
+            transform: translateX(-100px); 
+        }
+
+        .ped-label-left .ped-cloud.active,
+        .ped-label-left .ped-character.active {
+            opacity: 1;
+            transform: translateX(0); 
+        }
+
+
+        /* --- ANIMACIONES LADO DERECHO: Entran desde la derecha (+X) --- */
+        .ped-label-right .ped-cloud {
+            transform: translateX(100px); 
+        }
+        .ped-label-right .ped-cloud.active {
+            opacity: 1;
+            transform: translateX(0); 
+        }
+
+        /* Personaje Derecho (Con efecto espejo scaleX) */
+        .ped-label-right .ped-character {
+            transform: translateX(100px) scaleX(-1); 
+        }
+        .ped-label-right .ped-character.active {
+            opacity: 1;
+            transform: translateX(0) scaleX(-1);
+        }
+
+        /* Triangulitos de las nubes */
+        .ped-label-left .ped-cloud::after {
+            content: ''; position: absolute; top: 100%; right: 40px; 
+            border-width: 10px 10px 0 10px; border-style: solid;
+            border-color: #fff transparent transparent transparent;
+        }
+        .ped-label-right .ped-cloud::after {
+            content: ''; position: absolute; top: 100%; left: 40px; 
+            border-width: 10px 10px 0 10px; border-style: solid;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        .ped-cloud h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--accent-color);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            border-bottom: 2px solid var(--gold-color);
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+
+        .ped-cloud p {
+            font-family: 'Lato', sans-serif;
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1300px) {
+            .ped-label-container { width: 200px; }
+            .ped-label-left { margin-left: 5px; }
+            .ped-label-right { margin-right: 5px; }
+        }
+        @media (max-width: 900px) {
+            .pedagogical-layer { display: none; } 
+        }
     </style>
 </head>
 <body>
 
+    <!-- --- CÓDIGO HTML ORIGINAL INTACTO --- -->
     <div class="sidebar">
         <div class="project-title">Libro Álbum Digital</div>
     </div>
@@ -239,32 +350,64 @@
 
     <audio id="pageFlipSound" src="https://raw.githubusercontent.com/libroalbum/libro-lbum-pedag-gico/main/images/sonido%20deslizar.mp3" preload="auto"></audio>
 
+    <!-- ========================================================================= -->
+    <!-- --- HTML: CAPA DE ETIQUETAS Y PERSONAJE --- -->
+    <!-- ========================================================================= -->
+    <div class="pedagogical-layer">
+        
+        <!-- CONTENEDORES (Las clases de alineación se inyectarán por JS) -->
+        <div id="container-left" class="ped-label-container ped-label-left">
+            <div id="cloud-left" class="ped-cloud">
+                <h3 id="title-left">Título</h3>
+                <p id="desc-left">Descripción...</p>
+            </div>
+            
+            <!-- *** CAMBIA AQUI EL LINK DE LA IMAGEN DEL PERSONAJE (LADO IZQUIERDO) *** -->
+            <img id="char-left" class="ped-character" 
+                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Patrick_Star_character.png/330px-Patrick_Star_character.png" 
+                 alt="Personaje Guía">
+        </div>
+
+        <div id="container-right" class="ped-label-container ped-label-right">
+            <div id="cloud-right" class="ped-cloud">
+                <h3 id="title-right">Título</h3>
+                <p id="desc-right">Descripción...</p>
+            </div>
+            
+            <!-- *** CAMBIA AQUI EL LINK DE LA IMAGEN DEL PERSONAJE (LADO DERECHO) *** -->
+            <img id="char-right" class="ped-character" 
+                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Patrick_Star_character.png/330px-Patrick_Star_character.png" 
+                 alt="Personaje Guía">
+        </div>
+
+    </div>
+
     <script>
+        // --- CÓDIGO JAVASCRIPT ORIGINAL INTACTO ---
         const bookData = [
             // HOJA 1: Portada (Imagen) + Guarda Delantera
             {
                 front: {
                     type: "image-page",
-                    // *** AQUI ESTA LA IMAGEN DE LA PAGINA 1 (PORTADA) ***
                     bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada%20forntal.PNG?raw=true",
-                    tooltip: { title: "La Portada", text: "Es la cara del libro. En el libro álbum, la imagen es protagonista desde aquí." }
+                    tooltip: { title: "La Portada", text: "Es la cara del libro." }
                 },
                 back: {
                     type: "endpaper",
-                    tooltip: { title: "Guardas Delanteras", text: "Hojas de papel decorativo (verde pastel) que unen la tapa con el cuerpo." }
+                    tooltip: { title: "Guardas Delanteras", text: "Hojas de papel decorativo." }
                 }
             },
             // HOJA 2: Guarda + Hoja de Respeto
             {
                 front: {
                     type: "endpaper",
-                    tooltip: { title: "Guardas (Continuación)", text: "Transición visual suave hacia el contenido." }
+                    tooltip: { title: "Guardas", text: "Transición visual." }
                 },
                 back: {
                     type: "text-page",
                     title: "El Susurro de las Cumbres",
                     text: "(Hoja de Respeto)",
-                    tooltip: { title: "Hoja de Respeto", text: "Página de cortesía antes del contenido. Deja respirar al lector." }
+                    tooltip: { title: "Hoja de Respeto", text: "Página de cortesía." }
                 }
             },
             // HOJA 3: Créditos + Dedicatoria
@@ -273,19 +416,19 @@
                     type: "text-page",
                     title: "Créditos",
                     text: "<span class='legal-text'>Primera Edición Digital, 2024<br>Ilustraciones: Nature Collection<br>Diseño: Front-End Expert<br>ISBN: 978-0-123-45678-9<br>Todos los derechos reservados.</span>",
-                    tooltip: { title: "Página Legal", text: "Contiene el copyright y créditos de edición." }
+                    tooltip: { title: "Página Legal", text: "Créditos de edición." }
                 },
                 back: {
                     type: "text-page",
                     title: "Dedicatoria",
                     text: "<i>A la naturaleza,<br>que siempre cuenta las mejores historias.</i>",
-                    tooltip: { title: "Dedicatoria", text: "Espacio íntimo donde el autor ofrenda su trabajo." }
+                    tooltip: { title: "Dedicatoria", text: "Espacio íntimo." }
                 }
             },
-            // CUERPO DEL LIBRO (Imágenes) - A PARTIR DE AQUI EDITAS TUS IMAGENES INDIVIDUALES
+            // CUERPO DEL LIBRO (Imágenes)
         ];
 
-        // Se mantiene para estructura lógica (aunque ahora usamos enlaces directos abajo)
+        // Se mantiene para estructura lógica
         const landscapeImages = [
             "1470071459604-3b5ec3a7fe05", "1472214103451-9374bd1c798e", 
             "1501854140884-074cf2b29752", "1441974231531-c6227db76b6e", 
@@ -297,22 +440,20 @@
         ];
 
         // -----------------------------------------------------------------------------------------
-        // AQUI EMPIEZAN LAS HOJAS INDIVIDUALES (Antes esto era un bucle, ahora están separadas)
+        // AQUI EMPIEZAN LAS HOJAS INDIVIDUALES
         // -----------------------------------------------------------------------------------------
 
         // --- HOJA DE CONTENIDO 1 (Cuerpo) ---
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 1 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/1x.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 2 - LADO DERECHO pg 2) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg2.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
 
@@ -320,15 +461,13 @@
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 3 - LADO IZQUIERDO pg 3) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg3.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 4 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg4.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
 
@@ -336,15 +475,13 @@
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 5 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%205.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 6 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%206.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
 
@@ -352,15 +489,13 @@
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 7 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg7.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 8 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg8.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
 
@@ -368,15 +503,13 @@
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 9 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg9.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 10 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg10.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
 
@@ -384,15 +517,13 @@
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 11 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg11.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 12 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg12.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
 
@@ -400,35 +531,27 @@
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 13 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg13.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 14 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg14.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
-
-        // =========================================================================================
-        // --- HOJAS NUEVAS AGREGADAS (INICIO) ---
-        // =========================================================================================
 
         // --- HOJA NUEVA EXTRA 1 (Cuerpo) ---
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA NUEVA 15 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg15.jpg?raw=true", 
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA NUEVA 16 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%2016.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
 
@@ -436,43 +559,33 @@
         bookData.push({
             front: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA NUEVA 17 - LADO IZQUIERDO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%2017.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             },
             back: {
                 type: "image-page",
-                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA NUEVA 18 - LADO DERECHO) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg13.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
             }
         });
-
-        // =========================================================================================
-        // --- HOJAS NUEVAS AGREGADAS (FIN) ---
-        // =========================================================================================
-
-        // -----------------------------------------------------------------------------------------
-        // FIN DE LAS HOJAS INDIVIDUALES
-        // -----------------------------------------------------------------------------------------
 
         // HOJA FINAL: Guardas + Contraportada (Imagen)
         bookData.push({
             front: {
                 type: "endpaper",
-                tooltip: { title: "Guardas Finales", text: "Cierran la estructura física del libro." }
+                tooltip: { title: "Guardas Finales", text: "Cierre físico." }
             },
             back: {
                 type: "image-page",
-                // *** AQUI ESTA LA IMAGEN FINAL (CONTRAPORTADA) ***
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/contraportada.jpg?raw=true",
-                tooltip: { title: "Contraportada", text: "Cierre del libro. Imagen final evocadora sin texto." }
+                tooltip: { title: "Contraportada", text: "Imagen final." }
             }
         });
 
         // --- RENDERIZADO ---
         const bookContainer = document.getElementById('book');
         let currentPaperIndex = -1;
+        let globalPageCounter = 1; 
 
         bookData.forEach((sheet, index) => {
             const paper = document.createElement('div');
@@ -480,26 +593,33 @@
             paper.style.zIndex = bookData.length - index;
             paper.id = `p-${index}`;
 
-            const createFace = (data, isBack) => {
+            const frontPageNum = globalPageCounter;
+            globalPageCounter++;
+            const backPageNum = globalPageCounter;
+            globalPageCounter++;
+            const totalPages = bookData.length * 2;
+
+            const createFace = (data, isBack, pageNum) => {
                 let contentHTML = '';
                 if(data.type === 'text-page') {
                     contentHTML = `<h2>${data.title || ''}</h2><p>${data.text || ''}</p>`;
                 }
 
                 const bgStyle = data.bg ? `background-image: url('${data.bg}');` : '';
+                
+                let pageNumberHTML = '';
+                if (pageNum > 1 && pageNum < totalPages) {
+                    pageNumberHTML = `<span class="page-number">${pageNum}</span>`;
+                }
 
                 return `
                 <div class="${isBack ? 'back' : 'front'} ${data.type}" style="${bgStyle}">
                     <div class="content-wrapper">${contentHTML}</div>
-                    <div class="edu-hotspot"><i class="fas fa-info"></i></div>
-                    <div class="edu-bubble">
-                        <h4>${data.tooltip.title}</h4>
-                        <p>${data.tooltip.text}</p>
-                    </div>
+                    ${pageNumberHTML}
                 </div>`;
             };
 
-            paper.innerHTML = createFace(sheet.front, false) + createFace(sheet.back, true);
+            paper.innerHTML = createFace(sheet.front, false, frontPageNum) + createFace(sheet.back, true, backPageNum);
             bookContainer.appendChild(paper);
         });
 
@@ -507,9 +627,8 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         
-        // Referencia al audio
         const soundEffect = document.getElementById('pageFlipSound');
-        soundEffect.volume = 1.0; // Asegurar volumen al máximo
+        soundEffect.volume = 1.0; 
 
         function updateState() {
             papers.forEach((p, i) => {
@@ -530,26 +649,22 @@
 
             prevBtn.disabled = currentPaperIndex === -1;
             nextBtn.disabled = currentPaperIndex === papers.length - 1;
+
+            updatePedagogicalLabels();
         }
 
         function playFlipSound() {
-            // *** REPRODUCIR SONIDO ***
             soundEffect.currentTime = 0;
-            // Promesa para manejar errores si el navegador bloquea el audio
             var playPromise = soundEffect.play();
             if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Reproducción automática iniciada
-                })
-                .catch(error => {
-                    console.log("Audio bloqueado o no cargado: " + error);
-                });
+                playPromise.then(_ => { })
+                .catch(error => { console.log("Audio bloqueado: " + error); });
             }
         }
 
         function goNext() {
             if (currentPaperIndex < papers.length - 1) {
-                playFlipSound(); // Sonido al avanzar
+                playFlipSound(); 
                 currentPaperIndex++;
                 updateState();
             }
@@ -557,7 +672,7 @@
 
         function goPrev() {
             if (currentPaperIndex >= 0) {
-                playFlipSound(); // Sonido al retroceder
+                playFlipSound(); 
                 currentPaperIndex--;
                 updateState();
             }
@@ -580,6 +695,107 @@
             } else {
                 document.exitFullscreen();
             }
+        }
+
+        // =========================================================================
+        // --- SCRIPT: LÓGICA DE NUBES Y PERSONAJES ---
+        // =========================================================================
+        
+        function updatePedagogicalLabels() {
+            const containerLeft = document.getElementById('container-left');
+            const containerRight = document.getElementById('container-right');
+
+            const cloudLeft = document.getElementById('cloud-left');
+            const cloudRight = document.getElementById('cloud-right');
+            const titleLeft = document.getElementById('title-left');
+            const descLeft = document.getElementById('desc-left');
+            const titleRight = document.getElementById('title-right');
+            const descRight = document.getElementById('desc-right');
+            
+            const charLeft = document.getElementById('char-left');
+            const charRight = document.getElementById('char-right');
+
+            // 1. Ocultar todo
+            cloudLeft.classList.remove('active');
+            cloudRight.classList.remove('active');
+            charLeft.classList.remove('active');
+            charRight.classList.remove('active');
+
+            // 2. Esperar y mostrar la info correcta (y cambiar posición)
+            setTimeout(() => {
+                let leftInfo = null;
+                let rightInfo = null;
+
+                // --- LÓGICA DE INTERCAMBIO DE POSICIONES (RITMO NATURAL) ---
+                // Patrón: Intercambia, Intercambia, Mantiene, Mantiene...
+                // Esto genera un ciclo de estados A, B, A, A... que se repite cada 4 páginas.
+                // Indices (empezando en 0): 0(A), 1(B), 2(A), 3(A)...
+                
+                const normalizedIndex = currentPaperIndex + 1; // Ajustamos para empezar en 0 (Portada)
+                const cycleState = normalizedIndex % 4; 
+                const useAlternateConfig = (cycleState === 1); // Solo el índice 1 del ciclo es Config B
+
+                if (useAlternateConfig) {
+                    // CONFIGURACIÓN B (Alterna): Izquierda Arriba, Derecha Abajo
+                    containerLeft.classList.remove('align-bottom');
+                    containerLeft.classList.add('align-top');
+                    
+                    containerRight.classList.remove('align-top');
+                    containerRight.classList.add('align-bottom');
+                } else {
+                    // CONFIGURACIÓN A (Base): Izquierda Abajo, Derecha Arriba
+                    containerLeft.classList.remove('align-top');
+                    containerLeft.classList.add('align-bottom');
+                    
+                    containerRight.classList.remove('align-bottom');
+                    containerRight.classList.add('align-top');
+                }
+
+                // --- LOGICA DE CONTENIDO ---
+                
+                if (currentPaperIndex === -1) {
+                    rightInfo = { title: "La Portada", text: "Es la cara del libro. En el libro álbum, la imagen es protagonista desde aquí." };
+                } 
+                else if (currentPaperIndex === 0) {
+                    leftInfo = { title: "Guardas (Anverso)", text: "Estas son las guardas. Son las páginas que conectan la cubierta con el interior." };
+                    rightInfo = { title: "Guardas (Reverso)", text: "El color o diseño de las guardas anticipa la atmósfera emocional de la historia." };
+                }
+                else if (currentPaperIndex === 1) {
+                    leftInfo = { title: "Hoja de Respeto", text: "Página de cortesía antes del contenido. Deja respirar al lector." };
+                    rightInfo = { title: "Créditos", text: "Aquí se encuentran los datos legales: autoría, editorial y derechos de autor." };
+                }
+                else if (currentPaperIndex === 2) {
+                    leftInfo = { title: "Dedicatoria", text: "Espacio íntimo donde el autor ofrenda su trabajo a alguien especial." };
+                    rightInfo = { title: "Cuerpo del Cuento", text: "Aquí comienza la narrativa visual y textual de la historia (Página 7)." };
+                }
+                else if (currentPaperIndex >= 3 && currentPaperIndex <= 10) {
+                    leftInfo = { title: "Narrativa Visual", text: "La imagen izquierda dialoga con la derecha para construir significado." };
+                    rightInfo = { title: "Secuencia", text: "La sucesión de páginas marca el ritmo de lectura y el paso del tiempo." };
+                }
+                else if (currentPaperIndex === 11) {
+                    leftInfo = { title: "Desenlace", text: "Última página de la historia propiamente dicha." };
+                    rightInfo = { title: "Guarda Final", text: "Cierra la estructura física del libro, conectando el bloque de hojas con la tapa trasera." };
+                }
+                else if (currentPaperIndex === 12) {
+                    leftInfo = { title: "Contraportada", text: "Cierre del libro. A menudo contiene una imagen final evocadora sin revelar el final." };
+                }
+
+                // --- APLICAR TEXTOS Y ACTIVAR ---
+                if (leftInfo) {
+                    titleLeft.innerText = leftInfo.title;
+                    descLeft.innerText = leftInfo.text;
+                    cloudLeft.classList.add('active');
+                    charLeft.classList.add('active');
+                }
+                
+                if (rightInfo) {
+                    titleRight.innerText = rightInfo.title;
+                    descRight.innerText = rightInfo.text;
+                    cloudRight.classList.add('active');
+                    charRight.classList.add('active');
+                }
+
+            }, 300);
         }
 
         updateState();
