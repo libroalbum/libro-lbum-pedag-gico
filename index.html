@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Libro Álbum Digital Pedagógico</title>
     
-    <!-- Fuentes Elegantes -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -234,15 +232,11 @@
 
     <div id="stage">
         <div class="book" id="book">
-            <!-- Contenido generado por JS -->
-        </div>
+            </div>
     </div>
 
     <button class="nav-btn next-btn" id="nextBtn" onclick="goNext()"><i class="fas fa-chevron-right"></i></button>
 
-    <!-- *** EFECTO DE SONIDO *** -->
-    <!-- NOTA: Tu enlace de Pixabay es una web, no un archivo directo. He usado este sonido de 'card-slide' (deslizamiento) que es muy realista y funciona directamente. -->
-    <!-- Tu enlace era: https://pixabay.com/es/sound-effects/sliding-things-off-a-table-80588/ -->
     <audio id="pageFlipSound" src="https://raw.githubusercontent.com/libroalbum/libro-lbum-pedag-gico/main/images/sonido%20deslizar.mp3" preload="auto"></audio>
 
     <script>
@@ -288,10 +282,10 @@
                     tooltip: { title: "Dedicatoria", text: "Espacio íntimo donde el autor ofrenda su trabajo." }
                 }
             },
-            // CUERPO DEL LIBRO (Imágenes)
+            // CUERPO DEL LIBRO (Imágenes) - A PARTIR DE AQUI EDITAS TUS IMAGENES INDIVIDUALES
         ];
 
-        // Se mantiene para estructura lógica
+        // Se mantiene para estructura lógica (aunque ahora usamos enlaces directos abajo)
         const landscapeImages = [
             "1470071459604-3b5ec3a7fe05", "1472214103451-9374bd1c798e", 
             "1501854140884-074cf2b29752", "1441974231531-c6227db76b6e", 
@@ -302,22 +296,125 @@
             "1500964757637-c85e8a162699", "1518495973542-4542c06a5843"
         ];
 
-        for(let i=0; i<7; i++) {
-            bookData.push({
-                front: {
-                    type: "image-page",
-                    // *** AQUI ESTAN LAS IMAGENES DEL CUERPO DEL LIBRO (LADO IZQUIERDO) ***
-                    bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
-                    tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
-                },
-                back: {
-                    type: "image-page",
-                    // *** AQUI ESTAN LAS IMAGENES DEL CUERPO DEL LIBRO (LADO DERECHO) ***
-                    bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
-                    tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
-                }
-            });
-        }
+        // -----------------------------------------------------------------------------------------
+        // AQUI EMPIEZAN LAS HOJAS INDIVIDUALES (Antes esto era un bucle, ahora están separadas)
+        // -----------------------------------------------------------------------------------------
+
+        // --- HOJA DE CONTENIDO 1 (Cuerpo) ---
+        bookData.push({
+            front: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 1 - LADO IZQUIERDO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            },
+            back: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 1 - LADO DERECHO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            }
+        });
+
+        // --- HOJA DE CONTENIDO 2 (Cuerpo) ---
+        bookData.push({
+            front: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 2 - LADO IZQUIERDO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            },
+            back: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 2 - LADO DERECHO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            }
+        });
+
+        // --- HOJA DE CONTENIDO 3 (Cuerpo) ---
+        bookData.push({
+            front: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 3 - LADO IZQUIERDO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            },
+            back: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 3 - LADO DERECHO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            }
+        });
+
+        // --- HOJA DE CONTENIDO 4 (Cuerpo) ---
+        bookData.push({
+            front: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 4 - LADO IZQUIERDO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            },
+            back: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 4 - LADO DERECHO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            }
+        });
+
+        // --- HOJA DE CONTENIDO 5 (Cuerpo) ---
+        bookData.push({
+            front: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 5 - LADO IZQUIERDO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            },
+            back: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 5 - LADO DERECHO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            }
+        });
+
+        // --- HOJA DE CONTENIDO 6 (Cuerpo) ---
+        bookData.push({
+            front: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 6 - LADO IZQUIERDO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            },
+            back: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 6 - LADO DERECHO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            }
+        });
+
+        // --- HOJA DE CONTENIDO 7 (Cuerpo) ---
+        bookData.push({
+            front: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 7 - LADO IZQUIERDO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            },
+            back: {
+                type: "image-page",
+                // *** CAMBIA AQUI EL LINK DE LA IMAGEN (HOJA 7 - LADO DERECHO) ***
+                bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+            }
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // FIN DE LAS HOJAS INDIVIDUALES
+        // -----------------------------------------------------------------------------------------
 
         // HOJA FINAL: Guardas + Contraportada (Imagen)
         bookData.push({
