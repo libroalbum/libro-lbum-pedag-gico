@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Libro Álbum Digital Pedagógico</title>
     
+    <!-- Fuentes Elegantes -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -232,10 +234,16 @@
 
     <div id="stage">
         <div class="book" id="book">
-            </div>
+            <!-- Contenido generado por JS -->
+        </div>
     </div>
 
     <button class="nav-btn next-btn" id="nextBtn" onclick="goNext()"><i class="fas fa-chevron-right"></i></button>
+
+    <!-- *** EFECTO DE SONIDO *** -->
+    <!-- NOTA: Tu enlace de Pixabay es una web, no un archivo directo. He usado este sonido de 'card-slide' (deslizamiento) que es muy realista y funciona directamente. -->
+    <!-- Tu enlace era: https://pixabay.com/es/sound-effects/sliding-things-off-a-table-80588/ -->
+    <audio id="pageFlipSound" src="https://raw.githubusercontent.com/libroalbum/libro-lbum-pedag-gico/main/images/sonido%20deslizar.mp3" preload="auto"></audio>
 
     <script>
         const bookData = [
@@ -283,7 +291,7 @@
             // CUERPO DEL LIBRO (Imágenes)
         ];
 
-        // Esta lista ya no se usa para generar las urls, pero la dejo para no romper la estructura
+        // Se mantiene para estructura lógica
         const landscapeImages = [
             "1470071459604-3b5ec3a7fe05", "1472214103451-9374bd1c798e", 
             "1501854140884-074cf2b29752", "1441974231531-c6227db76b6e", 
@@ -361,6 +369,10 @@
         const papers = document.querySelectorAll('.paper');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+        
+        // Referencia al audio
+        const soundEffect = document.getElementById('pageFlipSound');
+        soundEffect.volume = 1.0; // Asegurar volumen al máximo
 
         function updateState() {
             papers.forEach((p, i) => {
@@ -383,8 +395,24 @@
             nextBtn.disabled = currentPaperIndex === papers.length - 1;
         }
 
+        function playFlipSound() {
+            // *** REPRODUCIR SONIDO ***
+            soundEffect.currentTime = 0;
+            // Promesa para manejar errores si el navegador bloquea el audio
+            var playPromise = soundEffect.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Reproducción automática iniciada
+                })
+                .catch(error => {
+                    console.log("Audio bloqueado o no cargado: " + error);
+                });
+            }
+        }
+
         function goNext() {
             if (currentPaperIndex < papers.length - 1) {
+                playFlipSound(); // Sonido al avanzar
                 currentPaperIndex++;
                 updateState();
             }
@@ -392,6 +420,7 @@
 
         function goPrev() {
             if (currentPaperIndex >= 0) {
+                playFlipSound(); // Sonido al retroceder
                 currentPaperIndex--;
                 updateState();
             }
