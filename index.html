@@ -160,43 +160,48 @@
         /* --- ELEMENTOS PEDAGÓGICOS --- */
         .edu-hotspot {
             position: absolute; top: 20px; right: 20px;
-            width: 30px; height: 30px; background: var(--gold-color);
+            width: 32px; height: 32px; /* Ligeramente más grande */
+            background: #fff; /* Fondo blanco */
+            border: 2px solid #333; /* Borde negro */
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: white; cursor: pointer; z-index: 50;
-            animation: pulse-gold 2s infinite;
+            color: #333; /* Icono negro */
+            cursor: pointer; z-index: 50;
+            animation: pulse-white 2s infinite; /* Nueva animación */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .back .edu-hotspot { right: auto; left: 20px; }
-        .edu-hotspot i { font-size: 0.9rem; }
+        .edu-hotspot i { font-size: 1rem; font-weight: 900; } /* Icono más grueso */
 
         .edu-bubble {
             position: absolute; top: 55px; right: -10px; width: 260px;
             background: white; padding: 15px; border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            border-top: 3px solid var(--gold-color);
+            border-top: 3px solid #333; /* Borde superior negro */
             opacity: 0; visibility: hidden; transform: translateY(10px);
             transition: all 0.3s ease; z-index: 60; text-align: left; pointer-events: none;
         }
         .edu-bubble::before {
             content: ''; position: absolute; top: -6px; right: 20px;
             width: 12px; height: 12px; background: white;
-            transform: rotate(45deg); border-top: 3px solid var(--gold-color); border-left: 3px solid var(--gold-color);
+            transform: rotate(45deg); border-top: 3px solid #333; border-left: 3px solid #333; /* Flecha negra */
         }
-        .back .edu-bubble { right: auto; left: -10px; border-top: 3px solid var(--gold-color); }
+        .back .edu-bubble { right: auto; left: -10px; border-top: 3px solid #333; }
         .back .edu-bubble::before { right: auto; left: 20px; }
         .edu-hotspot:hover + .edu-bubble { opacity: 1; visibility: visible; transform: translateY(0); }
 
         .edu-bubble h4 {
-            font-family: 'Cinzel', serif; color: var(--accent-color);
+            font-family: 'Cinzel', serif; color: #333; /* Título negro */
             font-size: 0.85rem; margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px;
         }
         .edu-bubble p {
             font-family: 'Lato', sans-serif; font-size: 0.8rem; line-height: 1.4; color: #666;
         }
 
-        @keyframes pulse-gold {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        /* Animación de pulso blanca */
+        @keyframes pulse-white {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7), 0 2px 5px rgba(0,0,0,0.1); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0), 0 2px 5px rgba(0,0,0,0.1); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 2px 5px rgba(0,0,0,0.1); }
         }
 
         /* --- BOTONES NAVEGACIÓN --- */
@@ -241,13 +246,14 @@
     <button class="nav-btn next-btn" id="nextBtn" onclick="goNext()"><i class="fas fa-chevron-right"></i></button>
 
     <script>
+        // --- DATA DEL LIBRO ---
         const bookData = [
             // HOJA 1: Portada (Imagen MONTAÑAS) + Guarda Delantera
             {
                 front: {
                     type: "image-page",
-                    // URL específica de Montañas para la Portada
-                    bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada.jpg?raw=true",
+                    // *** REEMPLAZAR ESTE ENLACE POR EL URL DE SU IMAGEN DE PORTADA ***
+                    bg: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
                     tooltip: { title: "La Portada", text: "Es la cara del libro. En el libro álbum, la imagen es protagonista desde aquí." }
                 },
                 back: {
@@ -286,28 +292,50 @@
             // CUERPO DEL LIBRO (Imágenes)
         ];
 
+        // *** LISTA DE ENLACES DE SUS IMÁGENES PARA EL CUERPO DEL LIBRO ***
+        // Estas son imágenes de RELLENO. Reemplace cada elemento de la lista 
+        // por el URL de la imagen que quiere usar en esa página.
+        // NOTA IMPORTANTE: El URL debe ser un ENLACE DIRECTO (terminar en .jpg, .png, etc.)
         const landscapeImages = [
-            
-        "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/2x.jpg?raw=true"
-            "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/2x.jpg?raw=true"
-        "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/2x.jpg?raw=true"
-        "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/2x.jpg?raw=true"
-        "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/2x.jpg?raw=true"
-        "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/2x.jpg?raw=true""https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/2x.jpg?raw=true"
-        
+            // Hoja 4 (Página 1 y 2)
+            // AÑADÍ UNA IMAGEN DE PRUEBA. REEMPLÁCELA CON SU URL DIRECTO.
+            "https://placehold.co/920x1200/536872/FFF/png?text=IMAGEN+DE+PRUEBA+P1",  // Front de la Hoja 4
+            "https://placehold.co/920x1200/536872/FFF/png?text=IMAGEN+DE+PRUEBA+P2",  // Back de la Hoja 4
+            // Hoja 5 (Página 3 y 4)
+            "URL_IMAGEN_PAGINA_3",
+            "URL_IMAGEN_PAGINA_4",
+            // Hoja 6 (Página 5 y 6)
+            "URL_IMAGEN_PAGINA_5",
+            "URL_IMAGEN_PAGINA_6",
+            // Hoja 7 (Página 7 y 8)
+            "URL_IMAGEN_PAGINA_7",
+            "URL_IMAGEN_PAGINA_8",
+            // Hoja 8 (Página 9 y 10)
+            "URL_IMAGEN_PAGINA_9",
+            "URL_IMAGEN_PAGINA_10",
+            // Hoja 9 (Página 11 y 12)
+            "URL_IMAGEN_PAGINA_11",
+            "URL_IMAGEN_PAGINA_12",
+            // Hoja 10 (Página 13 y 14)
+            "URL_IMAGEN_PAGINA_13",
+            "URL_IMAGEN_PAGINA_14"
         ];
+        // Nota: Asegúrese de que su lista 'landscapeImages' contenga 14 URL de imágenes válidas.
+        // Reemplace los "URL_IMAGEN_PAGINA_X" con sus enlaces directos.
 
         for(let i=0; i<7; i++) {
             bookData.push({
                 front: {
                     type: "image-page",
-                    bg: `https://images.unsplash.com/photo-${landscapeImages[i*2]}?auto=format&fit=crop&q=80&w=800`,
-                    tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                    // Usa el enlace de la lista 'landscapeImages'
+                    bg: landscapeImages[i*2], 
+                    tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa. Reemplace el URL por el suyo (debe ser un enlace directo)." }
                 },
                 back: {
                     type: "image-page",
-                    bg: `https://images.unsplash.com/photo-${landscapeImages[(i*2)+1]}?auto=format&fit=crop&q=80&w=800`,
-                    tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa." }
+                    // Usa el siguiente enlace de la lista 'landscapeImages'
+                    bg: landscapeImages[(i*2)+1],
+                    tooltip: { title: "Narrativa Visual", text: "Ilustración a página completa. Reemplace el URL por el suyo (debe ser un enlace directo)." }
                 }
             });
         }
@@ -320,13 +348,13 @@
             },
             back: {
                 type: "image-page",
-                // URL específica de Montañas (diferente a portada) para Contraportada
+                // *** REEMPLAZAR ESTE ENLACE POR EL URL DE SU IMAGEN DE CONTRAPORTADA ***
                 bg: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&q=80&w=800",
                 tooltip: { title: "Contraportada", text: "Cierre del libro. Imagen final evocadora sin texto." }
             }
         });
 
-        // --- RENDERIZADO ---
+        // --- RENDERIZADO (NO NECESITA CAMBIAR NADA ABAJO) ---
         const bookContainer = document.getElementById('book');
         let currentPaperIndex = -1;
 
@@ -342,12 +370,14 @@
                     contentHTML = `<h2>${data.title || ''}</h2><p>${data.text || ''}</p>`;
                 }
 
-                const bgStyle = data.bg ? `background-image: url('${data.bg}');` : '';
+                // Aquí se inserta el URL en el estilo CSS
+                const bgStyle = data.bg && data.bg.startsWith('http') ? `background-image: url('${data.bg}');` : 'background-color: #f0f0f0;';
 
                 return `
                 <div class="${isBack ? 'back' : 'front'} ${data.type}" style="${bgStyle}">
                     <div class="content-wrapper">${contentHTML}</div>
-                    <div class="edu-hotspot"><i class="fas fa-info"></i></div>
+                    <!-- Icono de información pedagógica -->
+                    <div class="edu-hotspot"><i class="fas fa-question"></i></div>
                     <div class="edu-bubble">
                         <h4>${data.tooltip.title}</h4>
                         <p>${data.tooltip.text}</p>
