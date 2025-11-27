@@ -9,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        /* --- VARIABLES & RESET (CÓDIGO ORIGINAL INTACTO) --- */
+        /* --- VARIABLES & RESET (CÓDIGO ORIGINAL) --- */
         :root {
             --book-width: 460px;
             --book-height: 600px;
@@ -187,6 +187,40 @@
         }
 
         /* ========================================================================= */
+        /* --- !!! AJUSTE MÓVIL ESPECÍFICO (CORRECCIÓN DE DEFORMACIÓN Y BURBUJAS) !!! --- */
+        /* ========================================================================= */
+        @media (max-width: 768px) {
+            :root { 
+                /* CORRECCIÓN DE DEFORMACIÓN: */
+                /* Usamos el ancho máximo posible seguro (44vw por página = 88vw total) */
+                --book-width: 44vw; 
+                /* La altura NO es fija, se calcula proporcionalmente al ancho (ratio 1.35 aprox) */
+                /* Esto asegura que la cartilla NUNCA se deforme, siempre será un rectángulo armónico */
+                --book-height: calc(44vw * 1.35); 
+            }
+
+            /* Perspectiva más suave */
+            #stage { perspective: 1200px; }
+
+            /* Ajuste de textos internos */
+            .text-page { padding: 15px; }
+            .text-page h2 { font-size: 0.8rem; margin-bottom: 8px; }
+            .text-page p { font-size: 0.55rem; line-height: 1.4; }
+            .legal-text { font-size: 0.45rem !important; }
+            .page-number { font-size: 8px; bottom: 8px; }
+
+            /* Controles abajo */
+            .nav-btn {
+                top: auto; bottom: 30px; transform: none;
+                width: 40px; height: 40px;
+                background: rgba(255,255,255,0.9);
+                border: 1px solid #ddd;
+            }
+            .prev-btn { left: 20px; }
+            .next-btn { right: 20px; }
+        }
+
+        /* ========================================================================= */
         /* --- ESTILO: SISTEMA DE ETIQUETAS PEDAGÓGICAS Y PERSONAJE --- */
         /* ========================================================================= */
         .pedagogical-layer {
@@ -204,40 +238,17 @@
             width: 250px;
             display: flex;
             flex-direction: column;
-            /* CAMBIO: Transición más suave para cambios de posición */
             transition: padding 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* CLASES DINÁMICAS DE POSICIÓN VERTICAL (Base) */
-        .align-bottom {
-            justify-content: flex-end;
-            /* El padding se ajustará dinámicamente en JS para la variación */
-            padding-top: 0;
-        }
+        .align-bottom { justify-content: flex-end; padding-top: 0; }
+        .align-top { justify-content: flex-start; padding-bottom: 0; }
 
-        .align-top {
-            justify-content: flex-start;
-            padding-bottom: 0;
-        }
+        .ped-label-left { margin-left: 5px; text-align: right; align-items: flex-end; }
+        .ped-label-right { margin-right: 5px; text-align: left; align-items: flex-start; }
 
-        /* --- CONFIGURACIÓN DE ANIMACIONES LATERALES --- */
-        
-        .ped-label-left {
-            margin-left: 5px; 
-            text-align: right;
-            align-items: flex-end;
-        }
-
-        .ped-label-right {
-            margin-right: 5px; 
-            text-align: left;
-            align-items: flex-start;
-        }
-
-        /* Estilos base (ocultos) */
         .ped-cloud, .ped-character {
             opacity: 0;
-            /* CAMBIO: Curva de animación 'Fluid' (más natural) */
             transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -253,84 +264,61 @@
         }
 
         .ped-character {
-            width: 120px;
-            height: auto;
-            transition-delay: 0.1s; 
+            width: 120px; height: auto; transition-delay: 0.1s; 
         }
 
-        /* --- ANIMACIONES LADO IZQUIERDO: Entran desde la izquierda (-X) --- */
-        .ped-label-left .ped-cloud,
-        .ped-label-left .ped-character {
-            transform: translateX(-150px); /* Un poco más lejos para dar más recorrido */
-        }
+        /* ANIMACIONES */
+        .ped-label-left .ped-cloud, .ped-label-left .ped-character { transform: translateX(-150px); }
+        .ped-label-left .ped-cloud.active, .ped-label-left .ped-character.active { opacity: 1; transform: translateX(0); }
 
-        .ped-label-left .ped-cloud.active,
-        .ped-label-left .ped-character.active {
-            opacity: 1;
-            transform: translateX(0); 
-        }
+        .ped-label-right .ped-cloud { transform: translateX(150px); }
+        .ped-label-right .ped-cloud.active { opacity: 1; transform: translateX(0); }
 
+        .ped-label-right .ped-character { transform: translateX(150px) scaleX(-1); }
+        .ped-label-right .ped-character.active { opacity: 1; transform: translateX(0) scaleX(-1); }
 
-        /* --- ANIMACIONES LADO DERECHO: Entran desde la derecha (+X) --- */
-        .ped-label-right .ped-cloud {
-            transform: translateX(150px); 
-        }
-        .ped-label-right .ped-cloud.active {
-            opacity: 1;
-            transform: translateX(0); 
-        }
-
-        /* Personaje Derecho (Con efecto espejo scaleX) */
-        .ped-label-right .ped-character {
-            transform: translateX(150px) scaleX(-1); 
-        }
-        .ped-label-right .ped-character.active {
-            opacity: 1;
-            transform: translateX(0) scaleX(-1);
-        }
-
-        /* Triangulitos de las nubes */
+        /* Triangulitos nube */
         .ped-label-left .ped-cloud::after {
             content: ''; position: absolute; top: 100%; right: 40px; 
-            border-width: 10px 10px 0 10px; border-style: solid;
-            border-color: #fff transparent transparent transparent;
+            border-width: 10px 10px 0 10px; border-style: solid; border-color: #fff transparent transparent transparent;
         }
         .ped-label-right .ped-cloud::after {
             content: ''; position: absolute; top: 100%; left: 40px; 
-            border-width: 10px 10px 0 10px; border-style: solid;
-            border-color: #fff transparent transparent transparent;
+            border-width: 10px 10px 0 10px; border-style: solid; border-color: #fff transparent transparent transparent;
         }
 
         .ped-cloud h3 {
-            font-family: 'Cinzel', serif;
-            color: var(--accent-color);
-            font-size: 1rem;
-            margin-bottom: 8px;
-            border-bottom: 2px solid var(--gold-color);
-            display: inline-block;
-            padding-bottom: 3px;
+            font-family: 'Cinzel', serif; color: var(--accent-color); font-size: 1rem;
+            margin-bottom: 8px; border-bottom: 2px solid var(--gold-color); display: inline-block; padding-bottom: 3px;
         }
-
-        .ped-cloud p {
-            font-family: 'Lato', sans-serif;
-            font-size: 0.85rem;
-            color: #666;
-            line-height: 1.5;
-        }
+        .ped-cloud p { font-family: 'Lato', sans-serif; font-size: 0.85rem; color: #666; line-height: 1.5; }
 
         @media (max-width: 1300px) {
             .ped-label-container { width: 200px; }
-            .ped-label-left { margin-left: 5px; }
-            .ped-label-right { margin-right: 5px; }
         }
+
+        /* --- CORRECCIÓN FINAL: VISIBILIDAD DE PERSONAJES EN MÓVIL --- */
+        /* Eliminamos el display:none que los ocultaba y los adaptamos */
         @media (max-width: 900px) {
-            .pedagogical-layer { display: none; } 
+            /* Permitimos que se vean, pero ajustamos tamaño */
+            .pedagogical-layer { display: flex; } 
+            
+            .ped-label-container { width: 140px; } /* Más angostos */
+            
+            .ped-character { width: 80px; } /* Personajes más pequeños */
+            
+            .ped-cloud { 
+                padding: 10px; 
+                margin-bottom: 5px;
+            }
+            .ped-cloud h3 { font-size: 0.8rem; margin-bottom: 4px; }
+            .ped-cloud p { font-size: 0.65rem; line-height: 1.2; display: none; } /* Solo mostramos título en móvil para no saturar */
+            .ped-cloud p:first-of-type { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         }
     </style>
 </head>
 <body>
 
-    <!-- --- CÓDIGO HTML ORIGINAL INTACTO --- -->
     <div class="sidebar">
         <div class="project-title">Libro Álbum Digital</div>
     </div>
@@ -351,19 +339,12 @@
 
     <audio id="pageFlipSound" src="https://raw.githubusercontent.com/libroalbum/libro-lbum-pedag-gico/main/images/sonido%20deslizar.mp3" preload="auto"></audio>
 
-    <!-- ========================================================================= -->
-    <!-- --- HTML: CAPA DE ETIQUETAS Y PERSONAJE --- -->
-    <!-- ========================================================================= -->
     <div class="pedagogical-layer">
-        
-        <!-- CONTENEDORES (Las clases de alineación se inyectarán por JS) -->
         <div id="container-left" class="ped-label-container ped-label-left">
             <div id="cloud-left" class="ped-cloud">
                 <h3 id="title-left">Título</h3>
                 <p id="desc-left">Descripción...</p>
             </div>
-            
-            <!-- *** CAMBIA AQUI EL LINK DE LA IMAGEN DEL PERSONAJE (LADO IZQUIERDO) *** -->
             <img id="char-left" class="ped-character" 
                  src="https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/personaje%20izquierda.png?raw=true" 
                  alt="Personaje Guía">
@@ -374,24 +355,20 @@
                 <h3 id="title-right">Título</h3>
                 <p id="desc-right">Descripción...</p>
             </div>
-            
-            <!-- *** CAMBIA AQUI EL LINK DE LA IMAGEN DEL PERSONAJE (LADO DERECHO) *** -->
             <img id="char-right" class="ped-character" 
                  src="https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/personaje%20derecha.png?raw=true" 
                  alt="Personaje Guía">
         </div>
-
     </div>
 
     <script>
-        // --- CÓDIGO JAVASCRIPT ORIGINAL INTACTO ---
         const bookData = [
             // HOJA 1: Portada (Imagen) + Guarda Delantera
             {
                 front: {
                     type: "image-page",
                     bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/portada%20forntal.PNG?raw=true",
-                    tooltip: { title: "La Portada", text: "Es la cara del libro." }
+                    tooltip: { title: "La Portada", text: "Es la cara del libro. En el libro álbum, la imagen es protagonista desde aquí." }
                 },
                 back: {
                     type: "endpaper",
@@ -402,13 +379,13 @@
             {
                 front: {
                     type: "endpaper",
-                    tooltip: { title: "Guardas", text: "Transición visual." }
+                    tooltip: { title: "Guardas", text: "El color o diseño de las guardas anticipa la atmósfera emocional de la historia." }
                 },
                 back: {
                     type: "text-page",
                     title: "El Susurro de las Cumbres",
                     text: "(Hoja de Respeto)",
-                    tooltip: { title: "Hoja de Respeto", text: "Página de cortesía." }
+                    tooltip: { title: "Hoja de Respeto", text: "Página de cortesía antes del contenido. Deja respirar al lector." }
                 }
             },
             // HOJA 3: Créditos + Dedicatoria
@@ -417,27 +394,16 @@
                     type: "text-page",
                     title: "Créditos",
                     text: "<span class='legal-text'>Primera Edición Digital, 2024<br>Ilustraciones: Nature Collection<br>Diseño: Front-End Expert<br>ISBN: 978-0-123-45678-9<br>Todos los derechos reservados.</span>",
-                    tooltip: { title: "Página Legal", text: "Créditos de edición." }
+                    tooltip: { title: "Página Legal", text: "Aquí se encuentran los datos legales: autoría, editorial, ISBN." }
                 },
                 back: {
                     type: "text-page",
                     title: "Dedicatoria",
                     text: "<i>A la naturaleza,<br>que siempre cuenta las mejores historias.</i>",
-                    tooltip: { title: "Dedicatoria", text: "Espacio íntimo." }
+                    tooltip: { title: "Dedicatoria", text: "Espacio íntimo para dedicar la obra." }
                 }
             },
             // CUERPO DEL LIBRO (Imágenes)
-        ];
-
-        // Se mantiene para estructura lógica
-        const landscapeImages = [
-            "1470071459604-3b5ec3a7fe05", "1472214103451-9374bd1c798e", 
-            "1501854140884-074cf2b29752", "1441974231531-c6227db76b6e", 
-            "1426604966848-d7adac402bff", "1447752875204-b2f9798c19a3", 
-            "1511497584788-876760111969", "1504198458649-3128b932f49e", 
-            "1465146344425-f00d5f5c8f07", "1475924156734-496f6cac6ec1", 
-            "1502082553048-f009c37129b9", "1418065460487-3e41a6c84dc5", 
-            "1500964757637-c85e8a162699", "1518495973542-4542c06a5843"
         ];
 
         // -----------------------------------------------------------------------------------------
@@ -449,12 +415,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/1x.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Narrativa Visual", text: "Observa cómo la imagen ocupa todo el espacio." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg2.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Continuidad", text: "La historia sigue a través de las imágenes." }
             }
         });
 
@@ -463,12 +429,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg3.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Atmósfera", text: "Los colores transmiten emociones." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg4.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Detalles", text: "Fíjate en los pequeños elementos." }
             }
         });
 
@@ -477,12 +443,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%205.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Narrativa Visual", text: "Sin palabras, la imagen habla." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%206.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Secuencia", text: "El paso de página marca el tiempo." }
             }
         });
 
@@ -491,12 +457,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg7.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Perspectiva", text: "Diferentes ángulos enriquecen la historia." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg8.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Composición", text: "Equilibrio visual en la página." }
             }
         });
 
@@ -505,12 +471,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg9.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Luz y Sombra", text: "Crean profundidad y volumen." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg10.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Expresión", text: "Los personajes muestran sus sentimientos." }
             }
         });
 
@@ -519,12 +485,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg11.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Entorno", text: "El paisaje es un personaje más." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg12.png?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Acción", text: "El movimiento congelado en el tiempo." }
             }
         });
 
@@ -533,12 +499,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg13.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Clímax", text: "Momentos de mayor intensidad." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg14.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Desenlace", text: "La historia comienza a resolverse." }
             }
         });
 
@@ -547,12 +513,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg15.jpg?raw=true", 
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Reflexión", text: "Espacio para pensar." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%2016.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Calma", text: "La tensión disminuye." }
             }
         });
 
@@ -561,12 +527,12 @@
             front: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg%2017.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Finalizando", text: "Nos acercamos al cierre." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/pg13.jpg?raw=true",
-                tooltip: { title: "Narrativa Visual", text: "Ilustración." }
+                tooltip: { title: "Recuerdo", text: "Imágenes que perduran." }
             }
         });
 
@@ -574,12 +540,12 @@
         bookData.push({
             front: {
                 type: "endpaper",
-                tooltip: { title: "Guardas Finales", text: "Cierre físico." }
+                tooltip: { title: "Guardas Finales", text: "Cierre físico del libro." }
             },
             back: {
                 type: "image-page",
                 bg: "https://github.com/libroalbum/libro-lbum-pedag-gico/blob/main/images/contraportada.jpg?raw=true",
-                tooltip: { title: "Contraportada", text: "Imagen final." }
+                tooltip: { title: "Contraportada", text: "Imagen final y cierre." }
             }
         });
 
@@ -699,7 +665,7 @@
         }
 
         // =========================================================================
-        // --- SCRIPT: LÓGICA DE NUBES Y PERSONAJES ---
+        // --- SCRIPT: LÓGICA DE NUBES Y PERSONAJES (CORREGIDA) ---
         // =========================================================================
         
         function updatePedagogicalLabels() {
@@ -727,26 +693,17 @@
                 let leftInfo = null;
                 let rightInfo = null;
 
-                // --- LÓGICA DE MOVIMIENTO ORGÁNICO (ALEATORIO) ---
-                // 1. Determinar aleatoriamente si la izquierda va arriba o abajo
-                // 2. Determinar aleatoriamente un "margen variable" para que no siempre sea la misma altura
-                
-                const isLeftUp = Math.random() > 0.5; // 50% probabilidad
-                const isRightUp = !isLeftUp; // El lado derecho hace lo contrario para equilibrar
+                const isLeftUp = Math.random() > 0.5; 
+                const isRightUp = !isLeftUp; 
 
-                // Altura base
                 const baseHeight = "calc(50vh - 280px)"; 
-                
-                // Variación aleatoria entre 0px y 60px para que "floten" a distintas alturas
                 const randomOffsetLeft = Math.floor(Math.random() * 60) + "px";
                 const randomOffsetRight = Math.floor(Math.random() * 60) + "px";
 
-                // Aplicar lógica Izquierda
+                // Posicionamiento Izquierdo
                 containerLeft.classList.remove('align-top', 'align-bottom');
-                // Reset padding inline
                 containerLeft.style.paddingTop = "";
                 containerLeft.style.paddingBottom = "";
-
                 if (isLeftUp) {
                     containerLeft.classList.add('align-top');
                     containerLeft.style.paddingTop = `calc(${baseHeight} + ${randomOffsetLeft})`;
@@ -755,12 +712,10 @@
                     containerLeft.style.paddingBottom = `calc(${baseHeight} + ${randomOffsetLeft})`;
                 }
 
-                // Aplicar lógica Derecha
+                // Posicionamiento Derecho
                 containerRight.classList.remove('align-top', 'align-bottom');
-                // Reset padding inline
                 containerRight.style.paddingTop = "";
                 containerRight.style.paddingBottom = "";
-
                 if (isRightUp) {
                     containerRight.classList.add('align-top');
                     containerRight.style.paddingTop = `calc(${baseHeight} + ${randomOffsetRight})`;
@@ -769,53 +724,49 @@
                     containerRight.style.paddingBottom = `calc(${baseHeight} + ${randomOffsetRight})`;
                 }
 
-                // --- LOGICA DE CONTENIDO ---
+                // --- LÓGICA DE CONTENIDO DINÁMICA (SOLUCIÓN AL PROBLEMA DE DESAPARICIÓN) ---
                 
+                // Caso especial: Libro cerrado (Inicio)
                 if (currentPaperIndex === -1) {
-                    rightInfo = { title: "La Portada", text: "Es la cara del libro. En el libro álbum, la imagen es protagonista desde aquí." };
+                    const firstPage = bookData[0].front;
+                    if(firstPage.tooltip) rightInfo = firstPage.tooltip;
                 } 
-                else if (currentPaperIndex === 0) {
-                    leftInfo = { title: "Guardas (Anverso)", text: "Estas son las guardas. Son las páginas que conectan la cubierta con el interior." };
-                    rightInfo = { title: "Guardas (Reverso)", text: "El color o diseño de las guardas anticipa la atmósfera emocional de la historia." };
-                }
-                else if (currentPaperIndex === 1) {
-                    leftInfo = { title: "Hoja de Respeto", text: "Página de cortesía antes del contenido. Deja respirar al lector." };
-                    rightInfo = { title: "Créditos", text: "Aquí se encuentran los datos legales: autoría, editorial y derechos de autor." };
-                }
-                else if (currentPaperIndex === 2) {
-                    leftInfo = { title: "Dedicatoria", text: "Espacio íntimo donde el autor ofrenda su trabajo a alguien especial." };
-                    rightInfo = { title: "Cuerpo del Cuento", text: "Aquí comienza la narrativa visual y textual de la historia (Página 7)." };
-                }
-                else if (currentPaperIndex >= 3 && currentPaperIndex <= 10) {
-                    leftInfo = { title: "Narrativa Visual", text: "La imagen izquierda dialoga con la derecha para construir significado." };
-                    rightInfo = { title: "Secuencia", text: "La sucesión de páginas marca el ritmo de lectura y el paso del tiempo." };
-                }
-                else if (currentPaperIndex === 11) {
-                    leftInfo = { title: "Desenlace", text: "Última página de la historia propiamente dicha." };
-                    rightInfo = { title: "Guarda Final", text: "Cierra la estructura física del libro, conectando el bloque de hojas con la tapa trasera." };
-                }
-                else if (currentPaperIndex === 12) {
-                    leftInfo = { title: "Contraportada", text: "Cierre del libro. A menudo contiene una imagen final evocadora sin revelar el final." };
+                else {
+                    // Lado IZQUIERDO: Es el reverso de la página actual volteada
+                    // La página actual volteada es bookData[currentPaperIndex].back
+                    const leftPage = bookData[currentPaperIndex].back;
+                    if(leftPage && leftPage.tooltip) {
+                        leftInfo = leftPage.tooltip;
+                    }
+
+                    // Lado DERECHO: Es el anverso de la siguiente página (si existe)
+                    // La siguiente página es bookData[currentPaperIndex + 1].front
+                    if (currentPaperIndex + 1 < bookData.length) {
+                        const rightPage = bookData[currentPaperIndex + 1].front;
+                        if(rightPage && rightPage.tooltip) {
+                            rightInfo = rightPage.tooltip;
+                        }
+                    }
                 }
 
-                // --- APLICAR TEXTOS Y ACTIVAR ---
-                if (leftInfo) {
-                    titleLeft.innerText = leftInfo.title;
-                    descLeft.innerText = leftInfo.text;
+                // Si hay info, llenarla y activar
+                if(leftInfo) {
+                    titleLeft.textContent = leftInfo.title || "Nota";
+                    descLeft.textContent = leftInfo.text || "";
                     cloudLeft.classList.add('active');
                     charLeft.classList.add('active');
                 }
-                
-                if (rightInfo) {
-                    titleRight.innerText = rightInfo.title;
-                    descRight.innerText = rightInfo.text;
+                if(rightInfo) {
+                    titleRight.textContent = rightInfo.title || "Nota";
+                    descRight.textContent = rightInfo.text || "";
                     cloudRight.classList.add('active');
                     charRight.classList.add('active');
                 }
 
-            }, 300);
+            }, 800); 
         }
 
+        // Inicializar estado
         updateState();
     </script>
 </body>
